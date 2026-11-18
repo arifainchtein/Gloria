@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>gloria</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/Roboto.css">
+    <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
+    <link rel="stylesheet" href="assets/css/slideswitch.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body style="margin:auto">
+    <div class="container text-center container-fluid" style="margin-top:20px">
+        <div class="row">
+            <div class="col-sm-12 col-med-3 col-lg-3 row"><img class="col-3" src="assets/img/Gloria.svg">
+                <div class="col-7">
+                    <h5 id="host-name" class="show-raw-data" style="font-size:24px;margin-top:20px"></h5>
+                    <h6 id="time" style="font-size:16px"></h6>
+                </div><div class="col-1" style="display:flex;flex-direction:column;align-items:center;"><a id="system-info-icon" href="#"><i class="fas fa-cog text-primary" style="font-size: 24px;margin-left: 5px;padding-top: 20px;"></i></a><a id="power-info-icon" href="#" title="Power"><i class="fas fa-bolt text-warning" style="font-size: 24px;margin-left: 5px;padding-top: 14px;"></i></a><a id="relay-info-icon" href="#" title="Relay" style="text-decoration:none;"><span id="relay-icon-letter" style="display:inline-block;font-size:22px;font-weight:bold;margin-left:5px;padding-top:12px;color:#6c757d;">R</span></a><a id="pump-info-icon" href="#" title="Pump rule" style="text-decoration:none;"><span id="pump-icon-letter" style="display:inline-block;font-size:22px;font-weight:bold;margin-left:5px;padding-top:12px;color:#6c757d;">P</span></a></div>
+            </div>
+        </div>
+        <hr>
+        <div class="row" style="margin-left:5px;margin-right:5px">
+            <div id="system-info" class="col-sm-12 col-md-3 col-lg-3 card display-module d-none" style="margin-bottom:10px;">
+                <div class="row card-body" style="padding:10px;">
+                    <h6 id="title" class="col-6" style="font-size: 24px;width:100%">System Info</h6>
+                    <h6 style="font-size: 16px;width:30%;text-align:left;">Serial #</h6>
+                    <h6 id="serial-number" style="font-size: 16px;width:70%;"></h6>
+                    <h6 style="font-size: 16px;width:70%;text-align:left;">Board Temperature:</h6>
+                    <h6 id="temperature" style="font-size: 16px;width:30%;text-align:right;"></h6>
+                    <h6 style="font-size: 16px;width:48%;text-align:left;">RTC Battery Vol</h6>
+                    <h6 id="rtc-bat-volt" style="font-size: 16px;width:37%;"></h6><i class="fas fa-battery-full" id="rtc-battery-icon" style="font-size: 16px;width:15%;text-align:right;"></i>
+                    <h6 style="font-size: 16px;width:60%;text-align:left;">Internet Ping Time</h6>
+                    <h6 id="internet-ping-time" style="font-size: 16px;width:40%;text-align:right;"></h6>
+                    <hr>
+                    <div id="time-config" class="d-inline-flex" style="margin-top:5px;margin-bottom:10px">
+                        <h6 style="font-size: 16px;width:35%;text-align:center;margin-top:15px;">Set Time:</h6>
+                        <div class="btn-group" role="group" style="font-size: 16px;width:40%;text-align:left;"><button class="btn btn-primary btn-sm" id="manual-time-button" type="button" style="margin:10px;">Manually</button><button class="btn btn-primary btn-sm" id="internet-time-configure-button" type="button" style="margin:10px;">Internet</button></div>
+                    </div>
+                    <hr>
+                    <div id="coordinates" style="margin-top:5px;">
+                        <h5>GPS</h5><p class="form-text">Decimal, or degrees minutes seconds as the iPhone Compass shows them. Spaces work instead of the symbols, e.g. 33 51 35 S.</p>
+                        <h6 style="font-size: 14px;">Takes effect after the next restart.</h6>
+                        <div class="input-group"><span class="input-group-text">Latitude</span><input class="form-control" type="text" id="latitude" placeholder="33°51′35″ S or -33.859722"></div><small id="latitude-preview"></small>
+                        <div class="input-group" style="margin-top:10px;margin-bottom:10px"><span class="input-group-text">Longitude</span><input class="form-control" type="text" id="longitude" placeholder="151°12′40″ E or 151.211111"></div><small id="longitude-preview"></small><button class="btn btn-success" id="save-gps-button" type="button">Save GPS</button>
+                    </div>
+                </div>
+                <div class="card-footer" style="margin-top:20px;">
+                    <div class="btn-group" role="group"><button class="btn btn-success" id="system-info-cancel" type="button" style="margin-right:20px">Close</button></div>
+                </div>
+            </div>
+            <!-- Power panel: lightning button under the cog, same as Daffodil. Filled by index.js
+                 showPowerInfo() from /LangleyServlet?formName=GetPowerData every 5 s while open. -->
+            <div id="power-info" class="col-sm-12 col-md-3 col-lg-3 card display-module d-none" style="margin-bottom:10px;">
+                <div class="card-body" style="padding:10px;text-align:left;">
+                    <h6 style="font-size: 24px;text-align:center;">Power</h6>
+                    <div class="pw-battery-wrap">
+                        <div class="pw-battery"><div id="pw-battery-fill" class="pw-battery-fill"></div><div id="pw-battery-text" class="pw-battery-text">--</div></div><div class="pw-battery-nub"></div>
+                    </div>
+                    <div id="pw-soc-note" style="font-size:12px;color:#6c757d;text-align:center;margin-bottom:10px;"></div>
+                    <h6 class="pw-section">Now</h6>
+                    <div id="pw-sensors"></div>
+                    <h6 class="pw-section">Valentino board</h6>
+                    <div id="pw-board"></div>
+                    <h6 class="pw-section">Vital signs</h6>
+                    <div id="pw-vital"></div>
+                </div>
+                <div class="card-footer" style="margin-top:10px;">
+                    <button class="btn btn-success" id="power-info-close" type="button">Close</button>
+                </div>
+            </div>
+            <!-- Relay (2026-11-11): resend packets from devices Annabelle can't hear well - the R under the bolt -->
+            <div id="relay-info" class="col-sm-12 col-md-3 col-lg-3 card display-module d-none" style="margin-bottom:10px;">
+                <div class="card-body" style="padding:10px;text-align:left;">
+                    <h6 style="font-size:24px;">Relay</h6>
+                    <div class="input-group" style="margin-bottom:10px;"><label class="form-label" style="margin-top:1px;margin-right:5px;">Off</label><label class="form-label switch" style="margin-top:-15px;"><input type="checkbox" id="relay-switch"><span class="slider round">&nbsp;&nbsp;</span></label><label class="form-label" style="margin-top:1px;margin-left:5px;">On</label></div>
+                    <div class="input-group" style="margin-bottom:10px;"><span class="input-group-text">Skip if stronger than</span>
+                        <select class="form-select" id="relay-strong">
+                            <option value="-70">-70 dBm</option><option value="-80">-80 dBm</option><option value="-90">-90 dBm</option><option value="-100">-100 dBm</option><option value="0">relay everything</option>
+                        </select></div>
+                    <div class="input-group" style="margin-bottom:10px;"><span class="input-group-text">Stay awake to relay above</span>
+                        <input class="form-control" type="number" id="relay-minv" step="0.1" min="9" max="15"><span class="input-group-text">V</span>
+                        <button class="btn btn-primary" id="relay-minv-save" type="button">Save</button></div>
+                    <div id="relay-status" style="font-size:15px;"></div>
+                    <div id="relay-awake" style="font-size:14px;margin-top:4px;"></div>
+                    <div id="relay-ticker" style="font-size:15px;color:#7048e8;margin-top:6px;"></div>
+                    <div style="font-size:12px;color:#6c757d;margin-top:8px;">Gloria resends the packets it hears from devices that are weak here (Chinampa, Daffodils, their vital signs and link health), marked with its short name - Annabelle shows them "via ...". Packets heard stronger than the limit are left alone: that device reaches Annabelle on its own. When Gloria would otherwise sleep (night, low battery), relay on keeps it awake while the battery is above the voltage set here - LEDs and display stay off then. Below it Gloria sleeps as usual and relays only in its short awake windows.</div>
+                </div>
+                <div class="card-footer" style="margin-top:10px;">
+                    <button class="btn btn-success" id="relay-info-close" type="button">Close</button>
+                </div>
+            </div>
+            <!-- Pump rule (2026-11-18) - the P under the R. Filled by index.js from /GloriaServlet?formName=GetPumpData.
+                 Rows like the devices.digitalstables.com tab editor's colour rules: device, variable, comparison, value. -->
+            <div id="pump-info" class="col-sm-12 col-md-6 col-lg-6 card display-module d-none" style="margin-bottom:10px;">
+                <div class="card-body" style="padding:10px;text-align:left;">
+                    <h6 style="font-size:24px;text-align:center;">Pump</h6>
+                    <div id="pump-status" style="font-size:15px;margin-bottom:8px;"></div>
+                    <h6 class="pw-section">Start the pump when all of these hold</h6>
+                    <div id="pump-start-rows"></div>
+                    <button class="btn btn-link btn-sm" id="pump-start-add" type="button" style="padding-left:0;">+ Add condition</button>
+                    <h6 class="pw-section">Stop the pump when any of these holds</h6>
+                    <div id="pump-stop-rows"></div>
+                    <button class="btn btn-link btn-sm" id="pump-stop-add" type="button" style="padding-left:0;">+ Add condition</button>
+                    <div style="font-size:12px;color:#6c757d;">With no stop conditions, the pump stops as soon as the start conditions no longer all hold. Use a stop level a little past the start level so the pump does not keep starting and stopping.</div>
+                    <h6 class="pw-section">Settings</h6>
+                    <div class="input-group input-group-sm" style="margin-bottom:6px;"><span class="input-group-text">Data counts as stale after</span><input class="form-control" type="number" id="pump-stale" min="1" step="1"><span class="input-group-text">min</span></div>
+                    <div class="input-group input-group-sm" style="margin-bottom:6px;"><span class="input-group-text">Stop if no flow after</span><input class="form-control" type="number" id="pump-dryrun" min="2" max="255" step="1"><span class="input-group-text">s</span></div>
+                    <div class="input-group input-group-sm" style="margin-bottom:6px;"><span class="input-group-text">MANUAL: stop after</span><input class="form-control" type="number" id="pump-manualmin" min="1" step="1"><span class="input-group-text">min</span></div>
+                    <div class="input-group input-group-sm" style="margin-bottom:6px;"><span class="input-group-text">MANUAL: stop below</span><input class="form-control" type="number" id="pump-manualminv" min="9" max="15" step="0.1"><span class="input-group-text">V battery</span></div>
+                    <div class="input-group input-group-sm" style="margin-bottom:6px;"><span class="input-group-text">Flow meter</span><input class="form-control" type="number" id="pump-qfactor" min="0.01" step="0.01"><span class="input-group-text">pulses/s per L/min</span></div>
+                    <div class="input-group input-group-sm" style="margin-bottom:6px;"><span class="input-group-text">AUTO is the switch position with the pin</span><select class="form-select" id="pump-autowhenlow"><option value="0">HIGH</option><option value="1">LOW</option></select></div>
+                    <h6 class="pw-section">Devices heard</h6>
+                    <div id="pump-devices" style="font-size:13px;"></div>
+                    <div style="font-size:12px;color:#6c757d;">Only devices whose data carries this farm's authenticator code are listed - the pump never acts on anything else.</div>
+                    <h6 class="pw-section">Save</h6>
+                    <div class="input-group" style="margin-bottom:6px;"><span class="input-group-text">Authenticator code</span><input class="form-control" type="text" inputmode="numeric" autocomplete="one-time-code" id="pump-code" maxlength="8"></div>
+                    <div id="pump-message" style="min-height:1.2em;font-size:14px;"></div>
+                </div>
+                <div class="card-footer" style="margin-top:10px;">
+                    <button class="btn btn-danger d-none" id="pump-clear-fault" type="button" style="margin-right:10px;">Clear no-flow fault</button>
+                    <button class="btn btn-primary" id="pump-save" type="button" style="margin-right:10px;">Save rule</button>
+                    <button class="btn btn-success" id="pump-info-close" type="button">Close</button>
+                </div>
+            </div>
+            <div id="wifi-info" class="col-sm-12 col-md-3 col-lg-3 card display-module" style="margin-bottom:10px;">
+                <div class="card-header d-inline-flex" style="padding:5px;"><span id="lora-logo" style="font-size:14px;margin:5px;padding-right:15px;">LoRa</span><span id="ssid-name" style="margin:5px;font-size:14px;padding-right:20px"></span><i class="fas fa-wifi text-primary" id="wifi-config-icon" style="font-size: 24px;margin-left:5px;padding-left:20px"></i></div>
+                <div class="card-body d-none"></div>
+            </div>
+            <div id="wifi-configure" class="card display-module col-sm-12 col-md-3 col-lg-3 d-none" style="margin-bottom:20px;">
+                <div class="d-inline-flex card-header" style="margin-bottom:20px;">
+                    <h4 style="margin:auto;">Wifi&nbsp; Config</h4>
+                </div>
+                <div class="card-body">
+                    <div class="input-group" style="margin-bottom:10px;"><label class="form-label" style="margin-top:1px;margin-right:5px;">Access Point</label><label class="form-label switch" style="margin-top:-15px;"><input type="checkbox" id="wifi-switch" style="margin-top:-15px;"><span class="slider round">&nbsp;&nbsp;</span></label><label class="form-label" style="margin-top:1px;margin-left:5px;">SSID</label></div>
+                    <div class="input-group station-mode d-inline-flex" id="ssid-grp"><span class="input-group-text">SSID</span><select class="form-select" id="ssid"></select></div>
+                    <div class="input-group station-mode d-inline-flex" id="pass-grp" style="margin-top:20px"><span class="input-group-text">Password</span><input class="form-control" type="password" id="wifi-password"></div>
+                    <div class="input-group station-mode d-inline-flex" id="host-grp" style="margin-top:20px;"><span class="input-group-text">Host Name</span><input class="form-control" type="text" id="hostname"></div>
+                    <div class="input-group ap-mode d-inline-flex" id="ap-grp"><span class="input-group-text">AP SSID</span><input class="form-control" type="text" id="ap-address"></div>
+                    <div class="input-group ap-mode d-inline-flex" id="ap-pass-grp" style="margin-top:20px"><span class="input-group-text">Password</span><input class="form-control" type="password" id="ap-password"></div>
+                    <div class="input-group ap-mode d-inline-flex" id="ap-host-grp" style="margin-top:20px;"><span class="input-group-text">Host Name</span><input class="form-control" type="text" id="ap-hostname"></div>
+                </div>
+                <div class="card-footer">
+                    <div class="btn-group" role="group"><button class="btn btn-danger btn-sm" id="wifi-configure-cancel" type="button" style="margin-right:20px">Cancel</button><button class="btn btn-success btn-sm" id="wifi-configure-submit" type="button">Save</button></div>
+                </div>
+            </div>
+            <div id="gloria-pump" class="card display-module col-sm-12 col-md-3 col-lg-3 d-none" style="margin-bottom:20px;cursor:pointer;">
+                <div class="d-inline-flex card-header"><h4 style="margin:auto;">Pump</h4></div>
+                <h1 id="gloria-pump-value" style="font-size:60px;padding-top:10px;">-</h1>
+                <h5 class="card-footer"><span id="gloria-pump-mode"></span><br><span id="gloria-pump-detail" style="font-size:14px;"></span></h5>
+            </div>
+            <div id="gloria-flow" class="card display-module col-sm-12 col-md-3 col-lg-3 d-none" style="margin-bottom:20px;">
+                <div class="d-inline-flex card-header"><h4 style="margin:auto;">Flow</h4></div>
+                <h1 id="gloria-flow-value" style="font-size:80px;">0</h1>
+                <h5 class="card-footer"><span>L/min</span><br><span id="gloria-flow-detail" style="font-size:14px;"></span></h5>
+            </div>
+            <div id="langley-battery" class="card display-module col-sm-12 col-md-3 col-lg-3 d-none" style="margin-bottom:20px;">
+                <div class="d-inline-flex card-header"><h4 style="margin:auto;">Battery</h4></div>
+                <h1 id="langley-battery-value" style="font-size:80px;">0</h1>
+                <h5 class="card-footer"><span>Volts</span><br><span id="langley-battery-detail" style="font-size:14px;"></span></h5>
+            </div>
+            <div id="langley-solar" class="card display-module col-sm-12 col-md-3 col-lg-3 d-none" style="margin-bottom:20px;">
+                <div class="d-inline-flex card-header"><h4 style="margin:auto;">Solar Input</h4></div>
+                <h1 id="langley-solar-value" style="font-size:80px;">0</h1>
+                <h5 class="card-footer"><span>Volts</span><br><span id="langley-solar-detail" style="font-size:14px;"></span></h5>
+            </div>
+            <div id="langley-temperature" class="card display-module col-sm-12 col-md-3 col-lg-3 d-none" style="margin-bottom:20px;">
+                <div class="d-inline-flex card-header"><h4 style="margin:auto;">Temperature</h4></div>
+                <h1 id="langley-temperature-value" style="font-size:80px;">0</h1>
+                <h5 class="card-footer">&deg;C</h5>
+            </div>
+            <div id="langley-mode" class="card display-module col-sm-12 col-md-3 col-lg-3 d-none" style="margin-bottom:20px;">
+                <div class="d-inline-flex card-header"><h4 style="margin:auto;">Operating Mode</h4></div>
+                <h1 id="langley-mode-value" style="font-size:50px;padding-top:15px;padding-bottom:15px;">-</h1>
+                <h5 class="card-footer"><span id="langley-mode-detail" style="font-size:14px;"></span></h5>
+            </div>
+            <div id="langley-lora" class="card display-module col-sm-12 col-md-3 col-lg-3 d-none" style="margin-bottom:20px;">
+                <div class="d-inline-flex card-header"><h4 style="margin:auto;">LoRa Signal</h4></div>
+                <h1 id="langley-lora-value" style="font-size:80px;">0</h1>
+                <h5 class="card-footer"><span>dBm</span><br><span id="langley-lora-detail" style="font-size:14px;"></span></h5>
+            </div>
+        </div>
+        <div class="modal fade" role="dialog" tabindex="-1" id="manual-time-modal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Set Time</h4><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input id="date-input" type="datetime-local" style="margin-right:10px;">
+                    </div>
+                    <div class="modal-footer"><button class="btn btn-light" type="button" data-bs-dismiss="modal">Close</button><button class="btn btn-primary" id="manual-time-submit" type="button">Save</button></div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" role="dialog" tabindex="-1" id="show-raw-data-modal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="raw-data-title"></h4><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item" role="presentation"><a class="nav-link active" role="tab" data-bs-toggle="tab" href="#raw-data-panel">Data</a></li>
+                                <li class="nav-item" role="presentation"><a class="nav-link" role="tab" data-bs-toggle="tab" href="#raw-data-json-panel">JSON</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" role="tabpanel" id="raw-data-panel">
+                                    <div id="raw-data-table"></div>
+                                </div>
+                                <div class="tab-pane" role="tabpanel" id="raw-data-json-panel">
+                                    <div id="raw-data-json"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer"><button class="btn btn-light" type="button" data-bs-dismiss="modal">Close</button></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/index.js"></script>
+</body>
+
+</html>
